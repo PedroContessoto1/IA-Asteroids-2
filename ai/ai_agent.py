@@ -4,6 +4,8 @@ import torch.optim as optim
 import random
 import numpy as np
 import math
+from ai.ai_model import DQN
+from ai.ai_utils import ReplayMemory
 from collections import namedtuple, deque
 
 class DQNAgent:
@@ -64,29 +66,3 @@ class DQNAgent:
     def update_target_net(self):
         self.target_net.load_state_dict(self.policy_net.state_dict())
 
-class ReplayMemory:
-    def __init__(self, capacity):
-        self.capacity = capacity
-        self.memory = deque(maxlen=capacity)
-        self.Transition = namedtuple('Transition', ('state', 'action', 'reward', 'next_state', 'done'))
-
-    def push(self, *args):
-        self.memory.append(self.Transition(*args))
-
-    def sample(self, batch_size):
-        return random.sample(self.memory, batch_size)
-
-    def __len__(self):
-        return len(self.memory)
-
-class DQN(nn.Module):
-    def __init__(self, state_dim, action_dim):
-        super(DQN, self).__init__()
-        self.fc1 = nn.Linear(state_dim, 128)
-        self.fc2 = nn.Linear(128, 128)
-        self.fc3 = nn.Linear(128, action_dim)
-
-    def forward(self, x):
-        x = torch.relu(self.fc1(x))
-        x = torch.relu(self.fc2(x))
-        return self.fc3(x)

@@ -13,7 +13,3 @@ class DQN(nn.Module):
         x = torch.relu(self.fc2(x))
         x = self.fc3(x)
         return x
-
-def create_dqn(input_dim, output_dim):
-    model = DQN(input_dim, output_dim)
-    return model
