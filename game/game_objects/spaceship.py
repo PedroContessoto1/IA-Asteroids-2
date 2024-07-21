@@ -46,8 +46,10 @@ class Spaceship:
         self.rect.center = (self.x, self.y)
 
         # Atualizar os projéteis
-        for bullet in self.bullets:
+        for bullet in self.bullets[:]:
             bullet.update()
+            if bullet.is_expired():
+                self.bullets.remove(bullet)
 
     def draw(self, screen):
         rotated_image = pygame.transform.rotate(self.original_image, self.angle - 90)  # Ajustar a rotação para a posição correta
@@ -76,8 +78,9 @@ class Spaceship:
             self.speed_x = 0
         if abs(self.speed_y) < 0.01:
             self.speed_y = 0
+
     def shoot(self, current_frame, frame_interval=300):
         if current_frame - self.last_shot_frame >= frame_interval:  # Verificar intervalo de frames
-            bullet = Bullet(self.x, self.y, self.angle)
+            bullet = Bullet(self.x, self.y, self.angle, self.screen_width, self.screen_height)
             self.bullets.append(bullet)
             self.last_shot_frame = current_frame

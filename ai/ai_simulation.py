@@ -91,8 +91,9 @@ class AISimulation:
         #     done = True
 
         # Verifica se houve acertos nos asteroides e incrementa o reward conforme necessário
-        episode_done = self.logic.check_collisions()
-        if episode_done:
+        _, hit = self.logic.check_collisions()
+        if hit:
+            print("acertou")
             reward += 1
             done = True
 

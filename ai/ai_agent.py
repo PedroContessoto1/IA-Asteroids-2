@@ -9,7 +9,7 @@ from ai.ai_utils import ReplayMemory
 from collections import namedtuple, deque
 
 class DQNAgent:
-    def __init__(self, state_dim, action_dim, memory_capacity=10000, batch_size=64, gamma=0.99, epsilon_start=1.0, epsilon_end=0.01, epsilon_decay=500):
+    def __init__(self, state_dim, action_dim, memory_capacity=10000, batch_size=64, gamma=0.99, epsilon_start=1.0, epsilon_end=0.01, epsilon_decay=50000):
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.memory = ReplayMemory(memory_capacity)
@@ -65,4 +65,21 @@ class DQNAgent:
 
     def update_target_net(self):
         self.target_net.load_state_dict(self.policy_net.state_dict())
+
+    def save_model(self, filepath):
+        torch.save({
+            'policy_net_state_dict': self.policy_net.state_dict(),
+            'target_net_state_dict': self.target_net.state_dict(),
+            'optimizer_state_dict': self.optimizer.state_dict(),
+            'epsilon': self.epsilon,
+            'steps_done': self.steps_done
+        }, filepath)
+
+    def load_model(self, filepath):
+        checkpoint = torch.load(filepath)
+        self.policy_net.load_state_dict(checkpoint['policy_net_state_dict'])
+        self.target_net.load_state_dict(checkpoint['target_net_state_dict'])
+        self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        self.epsilon = checkpoint['epsilon']
+        self.steps_done = checkpoint['steps_done']
 
