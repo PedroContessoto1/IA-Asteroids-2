@@ -9,7 +9,7 @@ from ai.ai_utils import ReplayMemory
 from collections import namedtuple, deque
 
 class DQNAgent:
-    def __init__(self, state_dim, action_dim, memory_capacity=10000, batch_size=64, gamma=0.99, epsilon_start=1.0, epsilon_end=0.01, epsilon_decay=50000):
+    def __init__(self, state_dim, action_dim, memory_capacity=10000, batch_size=64, gamma=0.99, epsilon_start=0.8, epsilon_end=0.01, epsilon_decay=5000000):
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.memory = ReplayMemory(memory_capacity)

@@ -31,9 +31,9 @@ class AISimulation:
         self.current_frame += 1
         self.logic.handle_action(action, self.current_frame)
 
-        episode_done = self.logic.update()
+        episode_done, hit = self.logic.update()
         next_state = self.get_state()
-        reward, done = self.get_reward_done()
+        reward, done = self.get_reward_done(hit)
         info = {'lives': self.logic.lives}
         return next_state, reward, done, info
 
@@ -76,7 +76,7 @@ class AISimulation:
 
         return np.array(state)
 
-    def get_reward_done(self):
+    def get_reward_done(self, hit):
         reward = 0
         done = False
 
@@ -91,9 +91,7 @@ class AISimulation:
         #     done = True
 
         # Verifica se houve acertos nos asteroides e incrementa o reward conforme necessário
-        _, hit = self.logic.check_collisions()
         if hit:
-            print("acertou")
             reward += 1
             done = True
 

@@ -44,9 +44,9 @@ class GameLogic:
             bullet.update()
         for asteroid in self.asteroids:
             asteroid.update()
-        episode_done, _ = self.check_collisions()
+        episode_done, hit = self.check_collisions()
         self.check_level_completion()
-        return episode_done
+        return episode_done, hit
 
     def check_collisions(self):
         episode_done = False
